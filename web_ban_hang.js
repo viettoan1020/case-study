@@ -33,6 +33,7 @@ var products = [
         size: "Price: 4-13",
     },
 ];
+var cart = [];
 document.addEventListener("DOMContentLoaded", function () {
     console.log(products);
     renderData(products);
@@ -41,8 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderData(products1) {
     var listElement = ``;
     const containerCard = document.getElementById("container_card");
-    products1.forEach((product) => {
-        // console.log(product.title)
+    products1.forEach((product,index) => {
         var elementString = `
                 <div class="card" id="card">
                 <img src=${product.image} class="card-img-top" alt="...">
@@ -54,13 +54,20 @@ function renderData(products1) {
                             <br>
                             ${product.size};
                         </p>
-                        <a href="#" class="btn btn-primary">Add To Cart</a>
+                        <a href="#" class="btn btn-primary" onclick="addToCart(${index})">Add To Cart</a>
+                        <button type="button" class="btn btn-danger" onclick="btnDelete(${index})">Delete Product</button>
                     </div>
                 </div>    
                 `;
         listElement += elementString;
     });
     containerCard.innerHTML = listElement;
+}
+function addToCart(index) {
+    var product = products[index];
+    cart.push(product);
+    console.log(cart);
+    updateCartCount();
 }
 
 var btnAdd = document.getElementById("btn-add");
@@ -82,35 +89,14 @@ btnAdd.addEventListener("click", function (event) {
     products.push(newProduct);
     renderData(products);
 });
-function renderData(products1) {
-    var listElement = ``;
-    const containerCard = document.getElementById("container_card");
-
-    products1.forEach((product, index) => {
-        var elementString = `
-              <div class="card" id="card">
-                <img src=${product.image} class="card-img-top" alt="...">
-                <div class="card-body">
-                        <h5 class="card-title">${product.title}</h5>
-                        <p class="card-text">${product.text}
-                            <br>
-                            ${product.price};
-                            <br>
-                            ${product.size};
-                        </p>
-                        <a href="#" class="btn btn-primary">Add To Cart</a>
-                        <button type="button" class="btn btn-danger" onclick="btnDelete(${index}) ">Delete Product</button>
-                    </div>
-                </div>    
-                `;
-        listElement += elementString;
-    });
-    containerCard.innerHTML = listElement;
-}
 function btnDelete(index) {
     console.log(products)
     console.log(index)
     products.splice(index,1);
     console.log(products)
     renderData(products);
+}
+function updateCartCount() {
+    var cartCount = document.getElementById('cart-count');
+    cartCount.textContent = cart.length;
 }
